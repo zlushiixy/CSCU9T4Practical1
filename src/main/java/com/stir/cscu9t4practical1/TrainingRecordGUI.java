@@ -27,7 +27,8 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
     private JLabel labdist = new JLabel(" Distance (km):");
     private JButton addR = new JButton("Add");
     private JButton lookUpByDate = new JButton("Look Up");
-
+    // Add a new button to find all entries by date
+    private JButton findAllByDate = new JButton("Find All By Date");
     private TrainingRecord myAthletes = new TrainingRecord();
 
     private JTextArea outputArea = new JTextArea(5, 50);
@@ -70,6 +71,9 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
         lookUpByDate.addActionListener(this);
         add(outputArea);
         outputArea.setEditable(false);
+        // Add FindAllByDate button to the GUI
+        add(findAllByDate);
+        findAllByDate.addActionListener(this);
         setSize(720, 200);
         setVisible(true);
         blankDisplay();
@@ -84,13 +88,58 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
         String message = "";
         if (event.getSource() == addR) {
             message = addEntry("generic");
-        }
-        if (event.getSource() == lookUpByDate) {
+        } else if (event.getSource() == lookUpByDate) {
             message = lookupEntry();
+        } else if (event.getSource() == findAllByDate) {
+            message = findAllEntriesByDate();
         }
         outputArea.setText(message);
         blankDisplay();
     } // actionPerformed
+
+    public String findAllEntriesByDate() {
+        String message;
+        try {
+            int d = Integer.parseInt(day.getText());
+            int m = Integer.parseInt(month.getText());
+            int y = Integer.parseInt(year.getText());
+            
+            // Validate day, month, year values
+            if (isValidDate(d, m, y)) {
+                outputArea.setText("Finding all entries for " + d + " " + m + " " + y + " ...");
+                message = myAthletes.lookupEntry(d, m, y);
+            } else {
+                message = "Invalid date. Please enter a valid date (DD MM YYYY).";
+            }
+        } catch (NumberFormatException e) {
+            message = "Invalid input for date. Please enter numeric values for day, month, and year.";
+        }
+        return message;
+    }
+    
+    private boolean isValidDate(int day, int month, int year) {
+        // Validate day, month, year based on calendar rules
+        if (year < 1 || month < 1 || month > 12 || day < 1 || day > daysInMonth(month, year)) {
+            return false;
+        }
+        return true;
+    }
+    
+    private int daysInMonth(int month, int year) {
+        // Calculate number of days in a given month and year
+        switch (month) {
+            case 2:
+                return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) ? 29 : 28;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                return 30;
+            default:
+                return 31;
+        }
+    }
+    
 
     public String addEntry(String what) {
         String message = "Record added\n";
