@@ -143,19 +143,29 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
 
     public String addEntry(String what) {
         String message = "Record added\n";
-        System.out.println("Adding "+what+" entry to the records");
-        String n = name.getText();
-        int m = Integer.parseInt(month.getText());
-        int d = Integer.parseInt(day.getText());
-        int y = Integer.parseInt(year.getText());
-        float km = java.lang.Float.parseFloat(dist.getText());
-        int h = Integer.parseInt(hours.getText());
-        int mm = Integer.parseInt(mins.getText());
-        int s = Integer.parseInt(secs.getText());
-        Entry e = new Entry(n, d, m, y, h, mm, s, km);
-        myAthletes.addEntry(e);
+        try {
+            String n = name.getText().trim(); // Trim to remove leading/trailing whitespace
+            int d = Integer.parseInt(day.getText());
+            int m = Integer.parseInt(month.getText());
+            int y = Integer.parseInt(year.getText());
+            float km = Float.parseFloat(dist.getText());
+            int h = Integer.parseInt(hours.getText());
+            int mm = Integer.parseInt(mins.getText());
+            int s = Integer.parseInt(secs.getText());
+    
+            // Validate input values
+            if (isValidDate(d, m, y)) {
+                Entry e = new Entry(n, d, m, y, h, mm, s, km);
+                myAthletes.addEntry(e);
+            } else {
+                message = "Invalid date. Please enter a valid date (DD MM YYYY).";
+            }
+        } catch (NumberFormatException e) {
+            message = "Invalid input. Please ensure all fields are filled with numeric values.";
+        }
         return message;
     }
+    
     
     public String lookupEntry() {
         int m = Integer.parseInt(month.getText());
