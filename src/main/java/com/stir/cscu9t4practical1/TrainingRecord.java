@@ -20,16 +20,36 @@ public class TrainingRecord {
    } // addClass
    
    // look up the entry of a given day and month
-   public String lookupEntry (int d, int m, int y) {
-       ListIterator<Entry> iter = tr.listIterator();
-       String result = "No entries found";
-       while (iter.hasNext()) {
-          Entry current = iter.next();
-          if (current.getDay()==d && current.getMonth()==m && current.getYear()==y) 
-             result = current.getEntry();
-            }
-       return result;
-   } // lookupEntry
+   public String lookupEntry(int d, int m, int y) {
+    List<String> results = new ArrayList<>();
+    for (Entry entry : tr) {
+        if (entry.getDay() == d && entry.getMonth() == m && entry.getYear() == y) {
+            results.add(entry.getEntry());
+        }
+    }
+    if (results.isEmpty()) {
+        return "No entries found for " + d + "/" + m + "/" + y;
+    } else {
+        return String.join("\n", results);
+    }
+}
+
+// lookupEntry
+
+   public String findAllEntries(int d, int m, int y) {
+    List<String> results = new ArrayList<>();
+    for (Entry entry : tr) {
+        if (entry.getDay() == d && entry.getMonth() == m && entry.getYear() == y) {
+            results.add(entry.getEntry());
+        }
+    }
+    if (results.isEmpty()) {
+        return "No entries found for " + d + "/" + m + "/" + y;
+    } else {
+        return String.join("\n", results);
+    }
+}
+
    
    // Count the number of entries
    public int getNumberOfEntries(){
