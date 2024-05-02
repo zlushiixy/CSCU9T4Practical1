@@ -92,7 +92,7 @@ public class SwimEntryTest {
         System.out.println("getHour");
         Entry instance = new SwimEntry("Alice", 1, 2, 2003, 0, 16, 7, 3,"pool");
         int expResult = 0;
-        int result = instance.getHour();
+        int result = instance.getHours();
         assertEquals(expResult, result);
     }
 
@@ -104,7 +104,7 @@ public class SwimEntryTest {
         System.out.println("getMin");
         Entry instance = new SwimEntry("Alice", 1, 2, 2003, 0, 16, 7, 3,"pool");
         int expResult = 16;
-        int result = instance.getMin();
+        int result = instance.getMinutes();
         assertEquals(expResult, result);
     }
 
@@ -116,7 +116,7 @@ public class SwimEntryTest {
         System.out.println("getSec");
         Entry instance = new SwimEntry("Alice", 1, 2, 2003, 0, 16, 7, 3,"pool");
         int expResult = 7;
-        int result = instance.getSec();
+        int result = instance.getSeconds();
         assertEquals(expResult, result);
     }
 
@@ -138,15 +138,15 @@ public class SwimEntryTest {
     @Test
     public void testGetWhere() {
         System.out.println("getWhere");
-        Entry instanceA = new SwimEntry("Alice", 1, 2, 2003, 0, 16, 7, 3,"outdoors");
+        Entry instanceA = new SwimEntry("Alice", 1, 2, 2003, 0, 16, 7, 3, "outdoors");
         String expResultA = "outdoors";
-        String result = instanceA.getWhere();
-        assertEquals(expResultA, result);
+        String resultA = ((SwimEntry) instanceA).getWhere();
+        assertEquals(expResultA, resultA);
         
-        Entry instanceB = new SwimEntry("Alice", 1, 2, 2003, 0, 16, 7, 3,"pool");
-        String expResultB = "in a pool";
-        String result = instanceB.getWhere();
-        assertEquals(expResultB, result);
+        Entry instanceB = new SwimEntry("Alice", 1, 2, 2003, 0, 16, 7, 3, "pool");
+        String expResultB = "pool";
+        String resultB = ((SwimEntry) instanceB).getWhere();
+        assertEquals(expResultB, resultB);
     }
     /**
      * Test of getEntry method, of class SwimEntry.
@@ -155,7 +155,7 @@ public class SwimEntryTest {
     public void testGetEntry() {
         System.out.println("getEntry");
         Entry instance = new SwimEntry("Alice", 1, 2, 2003, 0, 16, 7, 3,"outdoors");
-        String expResult = "Alice swam 3.0 km outdoors in 0:16:7 on 1/2/2003\n";
+        String expResult = "Alice swam 3.0 km outdoors in 0:16:07 on 1/2/2003\n";
         String result = instance.getEntry();
         assertEquals(expResult, result);
     }

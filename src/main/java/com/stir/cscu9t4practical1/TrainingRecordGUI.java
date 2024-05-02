@@ -3,9 +3,9 @@ package com.stir.cscu9t4practical1;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+// import java.util.*;
 import javax.swing.*;
-import java.lang.Number;
+// import java.lang.Number;
 
 public class TrainingRecordGUI extends JFrame implements ActionListener {
 
@@ -16,8 +16,12 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
     private JTextField hours = new JTextField(2);
     private JTextField mins = new JTextField(2);
     private JTextField secs = new JTextField(2);
-    private JTextField dist = new JTextField(4);
+    private JTextField type = new JTextField(4);
+    private JTextField where = new JTextField(30);
+    private JTextField rep = new JTextField(2);
+    private JTextField recov = new JTextField(2);
     private JLabel labn = new JLabel(" Name:");
+    private JLabel labw = new JLabel(" Where:");
     private JLabel labd = new JLabel(" Day:");
     private JLabel labm = new JLabel(" Month:");
     private JLabel laby = new JLabel(" Year:");
@@ -25,12 +29,18 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
     private JLabel labmm = new JLabel(" Mins:");
     private JLabel labs = new JLabel(" Secs:");
     private JLabel labdist = new JLabel(" Distance (km):");
+    private JLabel labrep = new JLabel(" Repetitions:");
+    private JLabel labrecov = new JLabel(" Recovery:");
     private JButton addR = new JButton("Add");
     private JButton lookUpByDate = new JButton("Look Up");
     // Add a new button to find all entries by date
     private JButton findAllByDate = new JButton("Find All By Date");
-    private TrainingRecord myAthletes = new TrainingRecord();
+    private JButton removeButton = new JButton("Remove");
 
+    private TrainingRecord myAthletes = new TrainingRecord();
+    private JRadioButton runRadioButton = new JRadioButton("Run");
+    private JRadioButton cycleRadioButton = new JRadioButton("Cycle");
+    private JRadioButton swimRadioButton = new JRadioButton("Swim");
     private JTextArea outputArea = new JTextArea(5, 50);
 
     public static void main(String[] args) {
@@ -63,8 +73,14 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
         add(secs);
         secs.setEditable(true);
         add(labdist);
-        add(dist);
-        dist.setEditable(true);
+        add(type);
+        type.setEditable(true);
+        add(where);
+        add(labw);
+        add(labrep); // Add label for repetitions
+        add(rep); // Add field for repetitions
+        add(labrecov); // Add label for recovery
+        add(recov); // Add field for recovery
         add(addR);
         addR.addActionListener(this);
         add(lookUpByDate);
@@ -74,7 +90,24 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
         // Add FindAllByDate button to the GUI
         add(findAllByDate);
         findAllByDate.addActionListener(this);
-        setSize(720, 200);
+        // Add radio buttons for selecting session type
+        ButtonGroup sessionTypeGroup = new ButtonGroup();
+        sessionTypeGroup.add(runRadioButton);
+        sessionTypeGroup.add(cycleRadioButton);
+        sessionTypeGroup.add(swimRadioButton);
+        add(runRadioButton);
+        add(cycleRadioButton);
+        add(swimRadioButton);
+
+        // Add ActionListener for radio buttons
+        runRadioButton.addActionListener(this);
+        cycleRadioButton.addActionListener(this);
+        swimRadioButton.addActionListener(this);
+
+        add(removeButton);
+        removeButton.addActionListener(this);
+
+        setSize(720, 400);
         setVisible(true);
         blankDisplay();
 
@@ -93,9 +126,23 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
         } else if (event.getSource() == findAllByDate) {
             message = findAllEntriesByDate();
         }
+        else if (event.getSource() == removeButton) {
+             message = removeEntry();
+        }
         outputArea.setText(message);
         blankDisplay();
+
+        // Handle radio button selection
+        if (event.getSource() == runRadioButton) {
+            type.setEnabled(true); // Enable distance field for runs
+        } else if (event.getSource() == cycleRadioButton) {
+            type.setEnabled(true); // Enable distance field for cycles
+        } else if (event.getSource() == swimRadioButton) {
+            type.setEnabled(true); // Enable distance field for swims
+        }
     } // actionPerformed
+
+    
 
     public String findAllEntriesByDate() {
         String message;
@@ -144,27 +191,56 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
     public String addEntry(String what) {
         String message = "Record added\n";
         try {
-            String n = name.getText().trim(); // Trim to remove leading/trailing whitespace
+            String n = name.getText().trim();
             int d = Integer.parseInt(day.getText());
             int m = Integer.parseInt(month.getText());
             int y = Integer.parseInt(year.getText());
-            float km = Float.parseFloat(dist.getText());
+            float km = Float.parseFloat(type.getText());
             int h = Integer.parseInt(hours.getText());
             int mm = Integer.parseInt(mins.getText());
             int s = Integer.parseInt(secs.getText());
-    
-            // Validate input values
-            if (isValidDate(d, m, y)) {
-                Entry e = new Entry(n, d, m, y, h, mm, s, km);
-                myAthletes.addEntry(e);
+            String w = where.getText().trim();
+            int r = Integer.parseInt(rep.getText());
+            int rec = Integer.parseInt(recov.getText());
+
+            TrainingSession session;
+            if (runRadioButton.isSelected()) {
+                session = new SprintEntry(n, d, m, y, h, mm, s, km, r, rec );
+            } else if (cycleRadioButton.isSelected()) {
+                session = new CycleEntry(n, d, m, y, h, mm, s, km, "Road", "moderate"); // Example terrain and time
+            } else if (swimRadioButton.isSelected()) {
+                
+                session = new SwimEntry(n, d, m, y, h, mm, s, km, w); // Example: pool swim
             } else {
-                message = "Invalid date. Please enter a valid date (DD MM YYYY).";
+                session = new Entry(n, d, m, y, h, mm, s, km); // Default to general entry
             }
+
+            myAthletes.addEntry(session);
         } catch (NumberFormatException e) {
-            message = "Invalid input. Please ensure all fields are filled with numeric values.";
+            message = "Invalid input. Please ensure all fields are filled with valid values.";
         }
         return message;
     }
+
+public String removeEntry() {
+    String message = "Entry removed\n";
+    try {
+        String n = name.getText().trim();
+        int d = Integer.parseInt(day.getText());
+        int m = Integer.parseInt(month.getText());
+        int y = Integer.parseInt(year.getText());
+
+        // Call method to remove entry from TrainingRecord
+        boolean removed = myAthletes.removeEntry(n, d, m, y);
+        if (!removed) {
+            message = "Entry not found";
+        }
+    } catch (NumberFormatException e) {
+        message = "Invalid input. Please ensure date fields are filled with valid values.";
+    }
+    return message;
+}
+
     
     
     public String lookupEntry() {
@@ -184,7 +260,10 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
         hours.setText("");
         mins.setText("");
         secs.setText("");
-        dist.setText("");
+        type.setText("");
+        where.setText("");
+        rep.setText("");
+        recov.setText("");
 
     }// blankDisplay
     // Fills the input fields on the display for testing purposes only
@@ -193,10 +272,10 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
         day.setText(String.valueOf(ent.getDay()));
         month.setText(String.valueOf(ent.getMonth()));
         year.setText(String.valueOf(ent.getYear()));
-        hours.setText(String.valueOf(ent.getHour()));
-        mins.setText(String.valueOf(ent.getMin()));
-        secs.setText(String.valueOf(ent.getSec()));
-        dist.setText(String.valueOf(ent.getDistance()));
+        hours.setText(String.valueOf(ent.getHours()));
+        mins.setText(String.valueOf(ent.getMinutes()));
+        secs.setText(String.valueOf(ent.getSeconds()));
+        type.setText(String.valueOf(ent.getType()));
     }
 
 } // TrainingRecordGUI

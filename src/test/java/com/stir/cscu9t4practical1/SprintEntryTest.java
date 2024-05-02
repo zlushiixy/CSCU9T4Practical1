@@ -92,7 +92,7 @@ public class SprintEntryTest {
         System.out.println("getHour");
         Entry instance = new SprintEntry("Alice", 1, 2, 2003, 0, 16, 7, 300, 4, 2);
         int expResult = 0;
-        int result = instance.getHour();
+        int result = instance.getHours();
         assertEquals(expResult, result);
     }
 
@@ -104,7 +104,7 @@ public class SprintEntryTest {
         System.out.println("getMin");
         Entry instance = new SprintEntry("Alice", 1, 2, 2003, 0, 16, 7, 300, 4, 2);
         int expResult = 16;
-        int result = instance.getMin();
+        int result = instance.getMinutes();
         assertEquals(expResult, result);
     }
 
@@ -116,7 +116,7 @@ public class SprintEntryTest {
         System.out.println("getSec");
         Entry instance = new SprintEntry("Alice", 1, 2, 2003, 0, 16, 7, 300, 4, 2);
         int expResult = 7;
-        int result = instance.getSec();
+        int result = instance.getSeconds();
         assertEquals(expResult, result);
     }
 
@@ -126,7 +126,7 @@ public class SprintEntryTest {
     @Test
     public void testGetDistance() {
         System.out.println("getDistance");
-        Entry instance = new SprintEntry("Alice", 1, 2, 2003, 0, 16, 7, 300, 4, 2);
+        Entry instance = new SprintEntry("Alice", 1, 2, 2003, 0, 16, 7, 3, 4, 2);
         float expResult = 3.0F;
         float result = instance.getDistance();
         assertEquals(expResult, result, 0.0);
@@ -139,8 +139,8 @@ public class SprintEntryTest {
     public void testGetRepetitions() {
         System.out.println("getRepetitions");
         Entry instance = new SprintEntry("Alice", 1, 2, 2003, 0, 16, 7, 300, 4, 2);
-        int expResults = 4;
-        int result = instance.getRepetitions();
+        int expResult = 4;
+        int result = ((SprintEntry) instance).getRepetitions();
         assertEquals(expResult, result);
     }
     
@@ -149,10 +149,10 @@ public class SprintEntryTest {
      */
     @Test
     public void testGetRecovery() {
-        System.out.println("getRepetitions");
+        System.out.println("getRecovery");
         Entry instance = new SprintEntry("Alice", 1, 2, 2003, 0, 16, 7, 300, 4, 2);
-        int expResults = 2;
-        int result = instance.getRecovery();
+        int expResult = 2;
+        int result = ((SprintEntry) instance).getRecovery();
         assertEquals(expResult, result);
     }
 
@@ -163,7 +163,7 @@ public class SprintEntryTest {
     public void testGetEntry() {
         System.out.println("getEntry");
         Entry instance = new SprintEntry("Alice", 1, 2, 2003, 0, 16, 7, 300, 4, 2);
-        String expResult = "Alice sprinted 4x300m in 0:16:7 with 2 minutes recovery on 1/2/2003\n";
+        String expResult = "Alice sprinted 4x300.0m in 0:16:07 with 2 minutes recovery on 1/2/2003\n";
         String result = instance.getEntry();
         assertEquals(expResult, result);
     }

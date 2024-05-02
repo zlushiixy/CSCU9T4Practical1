@@ -93,7 +93,7 @@ public class CycleEntryTest {
         System.out.println("getHour");
         Entry instance = new CycleEntry("Alice", 1, 2, 2003, 0, 16, 7, 3, "asphalt", "fast");
         int expResult = 0;
-        int result = instance.getHour();
+        int result = instance.getHours();
         assertEquals(expResult, result);
     }
 
@@ -105,7 +105,7 @@ public class CycleEntryTest {
         System.out.println("getMin");
         Entry instance = new CycleEntry("Alice", 1, 2, 2003, 0, 16, 7, 3, "asphalt", "moderate");
         int expResult = 16;
-        int result = instance.getMin();
+        int result = instance.getMinutes();
         assertEquals(expResult, result);
     }
 
@@ -117,7 +117,7 @@ public class CycleEntryTest {
         System.out.println("getSec");
         Entry instance = new CycleEntry("Alice", 1, 2, 2003, 0, 16, 7, 3, "asphalt", "moderate");
         int expResult = 7;
-        int result = instance.getSec();
+        int result = instance.getSeconds();
         assertEquals(expResult, result);
     }
 
@@ -141,7 +141,7 @@ public class CycleEntryTest {
         System.out.println("getTerrain");
         Entry instance = new CycleEntry("Alice", 1, 2, 2003, 0, 16, 7, 3, "asphalt", "moderate");
         String expResult = "asphalt";
-        String result = instance.getTerrain();
+        String result = ((CycleEntry) instance).getTerrain();
         assertEquals(expResult, result);
     }
 
@@ -153,7 +153,7 @@ public class CycleEntryTest {
         System.out.println("getTempo");
         Entry instance = new CycleEntry("Alice", 1, 2, 2003, 0, 16, 7, 3, "asphalt", "moderate");
         String expResult = "moderate";
-        String result = instance.getTempo();
+        String result = ((CycleEntry) instance).getTempo();
         assertEquals(expResult, result);
     }
     
@@ -164,7 +164,7 @@ public class CycleEntryTest {
     public void testGetEntry() {
         System.out.println("getEntry");
         Entry instance = new CycleEntry("Alice", 1, 2, 2003, 0, 16, 7, 3, "asphalt", "moderate");
-        String expResult = "Alice cycled 3.0 km in 0:16:7 on 1/2/2003 on asphalt at moderate tempo\n";
+        String expResult = "Alice cycled 3.0 km in 0:16:07 on 1/2/2003 on asphalt at moderate tempo\n";
         String result = instance.getEntry();
         assertEquals(expResult, result);
     }

@@ -93,7 +93,7 @@ public class EntryTest {
         System.out.println("getHour");
         Entry instance = new Entry("Alice", 1, 2, 2003, 0, 16, 7, 3);
         int expResult = 0;
-        int result = instance.getHour();
+        int result = instance.getHours();
         assertEquals(expResult, result);
     }
 
@@ -105,7 +105,7 @@ public class EntryTest {
         System.out.println("getMin");
         Entry instance = new Entry("Alice", 1, 2, 2003, 0, 16, 7, 3);
         int expResult = 16;
-        int result = instance.getMin();
+        int result = instance.getMinutes();
         assertEquals(expResult, result);
     }
 
@@ -117,7 +117,7 @@ public class EntryTest {
         System.out.println("getSec");
         Entry instance = new Entry("Alice", 1, 2, 2003, 0, 16, 7, 3);
         int expResult = 7;
-        int result = instance.getSec();
+        int result = instance.getSeconds();
         assertEquals(expResult, result);
     }
 
@@ -140,7 +140,7 @@ public class EntryTest {
     public void testGetEntry() {
         System.out.println("getEntry");
         Entry instance = new Entry("Alice", 1, 2, 2003, 0, 16, 7, 3);
-        String expResult = "Alice ran 3.0 km in 0:16:7 on 1/2/2003\n";
+        String expResult = "Alice ran 3.0 km in 0:16:07 on 1/2/2003\n";
         String result = instance.getEntry();
         assertEquals(expResult, result);
     }

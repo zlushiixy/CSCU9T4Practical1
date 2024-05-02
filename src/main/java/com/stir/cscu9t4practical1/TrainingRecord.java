@@ -8,23 +8,23 @@ import java.util.*;
 
 
 public class TrainingRecord {
-    private List<Entry> tr;
+    private List<TrainingSession> tr;
     
     public TrainingRecord() {
-        tr = new ArrayList<Entry>();
+        tr = new ArrayList<>();
     } //constructor
     
     // add a record to the list
-   public void addEntry(Entry e){
-       tr.add(e);    
+   public void addEntry(TrainingSession session){
+       tr.add(session);    
    } // addClass
    
    // look up the entry of a given day and month
    public String lookupEntry(int d, int m, int y) {
     List<String> results = new ArrayList<>();
-    for (Entry entry : tr) {
+    for (TrainingSession entry : tr) {
         if (entry.getDay() == d && entry.getMonth() == m && entry.getYear() == y) {
-            results.add(entry.getEntry());
+            results.add(((Entry) entry).getEntry());
         }
     }
     if (results.isEmpty()) {
@@ -38,9 +38,9 @@ public class TrainingRecord {
 
    public String findAllEntries(int d, int m, int y) {
     List<String> results = new ArrayList<>();
-    for (Entry entry : tr) {
+    for (TrainingSession entry : tr) {
         if (entry.getDay() == d && entry.getMonth() == m && entry.getYear() == y) {
-            results.add(entry.getEntry());
+            results.add(((Entry) entry).getEntry());
         }
     }
     if (results.isEmpty()) {
@@ -50,6 +50,19 @@ public class TrainingRecord {
     }
 }
 
+// Remove an entry based on name and date
+public boolean removeEntry(String name, int d, int m, int y) {
+    Iterator<TrainingSession> iterator = tr.iterator();
+    while (iterator.hasNext()) {
+        Entry entry = (Entry) iterator.next();
+        if (entry.getName().equalsIgnoreCase(name) && entry.getDay() == d
+                && entry.getMonth() == m && entry.getYear() == y) {
+            iterator.remove();
+            return true; // Entry removed successfully
+        }
+    }
+    return false; // Entry not found
+}
    
    // Count the number of entries
    public int getNumberOfEntries(){
@@ -59,5 +72,7 @@ public class TrainingRecord {
    public void clearAllEntries(){
        tr.clear();
    }
+
+
    
 } // TrainingRecord
